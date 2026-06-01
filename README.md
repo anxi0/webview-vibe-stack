@@ -1,8 +1,8 @@
 # webview-vibe-stack
 
-모바일 WebView 앱용 풀스택 스타터 킷. Cursor·Bolt·Lovable 같은 AI 도구로 작업할 때 레이아웃과 분기 규칙을 맞추기 쉽게 잡아 둔 저장소다.
+Full-stack starter for mobile WebView apps. You pick backend and native shell once; the repo gives AI tools (Cursor, Bolt, Lovable, Claude Code) the same layout and branching rules so generated code stays consistent.
 
-백엔드는 **Supabase** 또는 **Next.js API**, 앱 껍데기는 **Capacitor** 또는 **Flutter** 중에서 고른다. 선택 기준은 [`app-architecture.md`](./app-architecture.md)에 정리돼 있다.
+Backend: **Supabase** or **Next.js API**. App shell: **Capacitor** or **Flutter**. Pick criteria live in [`app-architecture.md`](./app-architecture.md).
 
 ---
 
@@ -20,23 +20,23 @@
 
 ## Architecture
 
-플레이스홀더 파일을 쌓기보다, AI가 읽을 지침 문서를 기준으로 둔다.
+We ship guidance docs, not a pile of placeholder files. Point your agent at them before it writes code.
 
-- **[`app-architecture.md`](./app-architecture.md)**: 백엔드·앱 셸 분기, 모바일 UI/UX 제약
+- **[`app-architecture.md`](./app-architecture.md)**: backend and shell branches, mobile UI/UX constraints
 
 ### Backend
 
 | Case | Stack | When |
 | :--- | :--- | :--- |
-| **1** | **Supabase** | 빠른 프로토타입, 소셜/이메일 로그인, 실시간(채팅, 라이브 위치) |
-| **2** | **Next.js API Routes + ORM** | 복잡한 서버 로직, 여러 써드파티 API, 모놀리스 한 repo |
+| **1** | **Supabase** | Fast prototype, social/email auth, realtime (chat, live location) |
+| **2** | **Next.js API Routes + ORM** | Heavy server logic, many third-party APIs, one monorepo |
 
 ### App shell
 
 | Case | Stack | When |
 | :--- | :--- | :--- |
-| **A** | **Capacitor** | 일반 웹앱, 커머스, 커뮤니티, 대시보드, 경량 O2O |
-| **B** | **Flutter WebView** | 백그라운드 GPS/오디오, 15분 미만 주기 작업, BLE 상시 연결 |
+| **A** | **Capacitor** | Typical web app, commerce, community, dashboard, light O2O |
+| **B** | **Flutter WebView** | Background GPS/audio, jobs under ~15 minutes, always-on BLE |
 
 ---
 
@@ -56,7 +56,7 @@ npm install
 npm run create
 ```
 
-CLI가 이름, 백엔드, 앱 셸을 묻는다.
+The CLI asks for project name, backend, and app shell.
 
 ```
 🚀 webview-vibe-stack
@@ -101,10 +101,61 @@ flutter pub get && flutter run
 
 ### 4. Open in your AI editor
 
-생성된 폴더를 Cursor나 Claude Code로 연다. `app-architecture.md`를 컨텍스트에 넣고 요구사항을 적는다.
+Open the generated folder in Cursor or Claude Code. Add `app-architecture.md` to context, then describe what you want.
 
 ```
-app-architecture.md를 읽고, 아래 요구사항에 맞는 기능을 개발해줘.
+Read app-architecture.md and build the feature below.
+```
+
+### 5. Idea to shipped code (Claude Code skills)
+
+Run these [Superpowers](https://github.com/obra/superpowers) / gstack slash commands in order before you let the agent loose on `main`. Same order works in Cursor if you have the commands installed.
+
+| Step | Skill | You get |
+| :---: | :--- | :--- |
+| 1 | **`/office-hours`** | Hard questions on problem, demand, and wedge. No code. | Draft design under `~/.gstack/projects/.../*-design-*.md` |
+| 2 | **`/brainstorming`** | Repo-aware Q&A, two or three approaches, design sign-off before any implementation. | `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` |
+| 3 | **`/writing-plans`** | Task list with file paths, tests, and commit steps from the approved spec. | `docs/superpowers/plans/YYYY-MM-DD-<feature>.md` |
+| 4 | **`/using-git-worktrees`** | Isolated worktree (or editor workspace), deps installed, baseline tests green. | Separate working directory |
+| 5 | **`/subagent-driven-development`** | One subagent per plan task, spec check then code review, then commit. | Small commits, tests passing |
+
+Flow: `/office-hours` nails why → `/brainstorming` locks what → `/writing-plans` splits how → `/using-git-worktrees` gives you a safe branch → `/subagent-driven-development` runs the plan.
+
+**Where to start**
+
+- Vague idea: step 1.
+- Requirements already written: step 2.
+- Need demand proof or wedge clarity: prefer `/office-hours`.
+- Tweaking a feature inside this repo: prefer `/brainstorming`.
+- After step 3, tell the agent: run `/subagent-driven-development` on the plan file. For a second session in parallel, use `/executing-plans` (see Superpowers docs).
+
+**Sample prompts** (inside `projects/my-app`)
+
+```text
+/office-hours
+I want a push opt-in flow on this Capacitor + Supabase app.
+Start with who needs it, the smallest wedge, and how we know it worked.
+```
+
+```text
+/brainstorming
+Use the office-hours design. Lock opt-in UI and Supabase wiring.
+Follow the mobile checklist in app-architecture.md.
+```
+
+```text
+/writing-plans
+Write an implementation plan from docs/superpowers/specs/...-design.md.
+```
+
+```text
+/using-git-worktrees
+Create an isolated workspace on branch feature/push-opt-in.
+```
+
+```text
+/subagent-driven-development
+Execute docs/superpowers/plans/...-plan.md task by task.
 ```
 
 ---
@@ -146,7 +197,7 @@ projects/my-app/
 
 ## Web-to-native bridge
 
-Capacitor와 Flutter가 같은 `native-bridge.ts` 패턴을 쓴다.
+Capacitor and Flutter share the same `native-bridge.ts` pattern.
 
 ```typescript
 // lib/native-bridge.ts
@@ -165,7 +216,7 @@ export const sendNativeMessage = (action: string, data: any = {}) => {
 
 ## Mobile UI checklist
 
-WebView가 네이티브처럼 보이게 하려면:
+Before you ship, check:
 
 - [ ] Layout: `max-w-md mx-auto`
 - [ ] Touch targets: at least `h-11` (44px)
