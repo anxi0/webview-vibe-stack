@@ -1,68 +1,62 @@
-# 📱 webview-vibe-stack
+# webview-vibe-stack
 
-> **The Ultimate Adaptive Full-Stack WebView App Starter Kit for Vibe Coding.**
+모바일 WebView 앱용 풀스택 스타터 킷. Cursor·Bolt·Lovable 같은 AI 도구로 작업할 때 레이아웃과 분기 규칙을 맞추기 쉽게 잡아 둔 저장소다.
 
-`webview-vibe-stack`은 AI(Cursor, Bolt.new, Lovable 등)와의 협업을 극대화하여 모바일 웹뷰(WebView) 앱을 가장 빠르게 빌드할 수 있도록 설계된 풀스택 스타터 킷 아키텍처입니다.
-
-기획 요구사항에 따라 백엔드 아키텍처(**Supabase vs Next.js Native**)와 앱 껍데기 스택(**Capacitor vs Flutter**)을 유연하게 선택하여 작동하도록 가이드라인이 표준화되어 있습니다.
+백엔드는 **Supabase** 또는 **Next.js API**, 앱 껍데기는 **Capacitor** 또는 **Flutter** 중에서 고른다. 선택 기준은 [`app-architecture.md`](./app-architecture.md)에 정리돼 있다.
 
 ---
 
-## 🛠️ Tech Stack Matrix
+## Tech Stack
 
 | Layer | Technology | Status | Role |
 | :--- | :--- | :--- | :--- |
-| **Frontend** | **Next.js (App Router)** | 🔒 Fixed | Core Web Application |
-| **Styling** | **Tailwind CSS** | 🔒 Fixed | Utility-First Responsive UI |
-| **Components** | **Shadcn UI** | 🔒 Fixed | Mobile-Optimized Radix Primitives |
-| **Backend** | **Supabase** OR **Next.js API** | 🔀 Dynamic | Auth, Database, and Business Logic |
-| **App Shell** | **Capacitor** OR **Flutter** | 🔀 Dynamic | Native WebView Wrapper |
+| **Frontend** | **Next.js (App Router)** | Fixed | Core web app |
+| **Styling** | **Tailwind CSS** | Fixed | Responsive UI |
+| **Components** | **Shadcn UI** | Fixed | Mobile-friendly Radix primitives |
+| **Backend** | **Supabase** or **Next.js API** | Choose at scaffold | Auth, DB, business logic |
+| **App shell** | **Capacitor** or **Flutter** | Choose at scaffold | Native WebView wrapper |
 
 ---
 
-## 📐 Architecture Overview
+## Architecture
 
-이 프로젝트는 무의미한 플레이스홀더 코드를 양산하는 대신, AI가 프로젝트의 구조를 완벽히 이해하도록 돕는 가이드라인 문서를 중심으로 작동합니다.
+플레이스홀더 파일을 쌓기보다, AI가 읽을 지침 문서를 기준으로 둔다.
 
-- **[`./app-architecture.md`](./app-architecture.md)**: AI가 코드를 생성할 때 반드시 준수해야 하는 백엔드/앱 껍데기 선택 분기점 및 모바일 UI/UX 제약 조건이 명시된 마스터 지침서입니다.
+- **[`app-architecture.md`](./app-architecture.md)**: 백엔드·앱 셸 분기, 모바일 UI/UX 제약
 
-### 🔀 Decision Fork for AI
+### Backend
 
-AI 어시스턴트는 기획 요구사항에 따라 아래 구조를 자동으로 채택합니다.
-
-#### 1. Backend Layer
-
-| Case | Stack | 선택 기준 |
+| Case | Stack | When |
 | :--- | :--- | :--- |
-| **CASE 1** | **Supabase** | 빠른 프로토타이핑, 소셜/이메일 인증, 실시간 기능 (채팅, 라이브 트래킹) |
-| **CASE 2** | **Next.js API Routes + ORM** | 복잡한 서버 비즈니스 로직, 다단계 써드파티 API 연동, 완전한 모놀리식 아키텍처 |
+| **1** | **Supabase** | 빠른 프로토타입, 소셜/이메일 로그인, 실시간(채팅, 라이브 위치) |
+| **2** | **Next.js API Routes + ORM** | 복잡한 서버 로직, 여러 써드파티 API, 모놀리스 한 repo |
 
-#### 2. App Shell Layer
+### App shell
 
-| Case | Stack | 선택 기준 |
+| Case | Stack | When |
 | :--- | :--- | :--- |
-| **CASE A** | **Capacitor** | 표준 웹앱, 이커머스, 커뮤니티, AI 대시보드, 경량 O2O 서비스 |
-| **CASE B** | **Flutter WebView** | 백그라운드 GPS/오디오 스트리밍, 15분 미만 주기의 백그라운드 태스크, 지속적 BLE 통신 |
+| **A** | **Capacitor** | 일반 웹앱, 커머스, 커뮤니티, 대시보드, 경량 O2O |
+| **B** | **Flutter WebView** | 백그라운드 GPS/오디오, 15분 미만 주기 작업, BLE 상시 연결 |
 
 ---
 
-## 🚀 How to Use
+## Use
 
-### 1. 레포 클론
+### 1. Clone
 
 ```bash
-git clone https://github.com/your-org/webview-vibe-stack.git
+git clone https://github.com/anxi0/webview-vibe-stack.git
 cd webview-vibe-stack
 npm install
 ```
 
-### 2. 프로젝트 생성
+### 2. Scaffold
 
 ```bash
 npm run create
 ```
 
-대화형 CLI가 아래 질문을 순서대로 물어봅니다.
+CLI가 이름, 백엔드, 앱 셸을 묻는다.
 
 ```
 🚀 webview-vibe-stack
@@ -83,29 +77,31 @@ npm run create
 Project created at projects/my-app/
 ```
 
-### 3. 생성된 프로젝트 실행
+### 3. Run the generated app
 
-**Capacitor 선택 시:**
+**Capacitor:**
+
 ```bash
 cd projects/my-app
 npm install
 npm run dev
 ```
 
-**Flutter 선택 시:**
+**Flutter:**
+
 ```bash
-# 웹 앱
+# Web
 cd projects/my-app/web
 npm install && npm run dev
 
-# Flutter 네이티브
+# Native
 cd projects/my-app/native
 flutter pub get && flutter run
 ```
 
-### 4. AI 컨텍스트로 제공
+### 4. Open in your AI editor
 
-생성된 프로젝트를 Cursor, Claude Code 등 AI 어시스턴트에게 열어주고, `app-architecture.md`를 함께 제공하세요.
+생성된 폴더를 Cursor나 Claude Code로 연다. `app-architecture.md`를 컨텍스트에 넣고 요구사항을 적는다.
 
 ```
 app-architecture.md를 읽고, 아래 요구사항에 맞는 기능을 개발해줘.
@@ -113,56 +109,53 @@ app-architecture.md를 읽고, 아래 요구사항에 맞는 기능을 개발해
 
 ---
 
-## 📁 Generated Project Structure
+## Generated layout
 
-### CASE A — Capacitor
+### Case A — Capacitor
 
 ```
 projects/my-app/
 ├── app/
-│   ├── layout.tsx          # max-w-md 모바일 래퍼
+│   ├── layout.tsx          # max-w-md mobile wrapper
 │   ├── page.tsx
-│   └── api/hello/route.ts  # Next.js API Routes (CASE 2 선택 시)
+│   └── api/hello/route.ts  # Next.js API (Case 2)
 ├── lib/
-│   ├── native-bridge.ts    # Web-to-Native 브리지
-│   └── supabase.ts         # Supabase 클라이언트 (CASE 1 선택 시)
+│   ├── native-bridge.ts
+│   └── supabase.ts         # Case 1
 ├── capacitor.config.ts
-├── next.config.ts          # output: 'export' 적용
+├── next.config.ts          # output: 'export'
 └── package.json
 ```
 
-### CASE B — Flutter
+### Case B — Flutter
 
 ```
 projects/my-app/
-├── web/                    # Next.js 프로젝트
+├── web/
 │   ├── app/
 │   ├── lib/
 │   │   ├── native-bridge.ts
-│   │   └── supabase.ts     # CASE 1 선택 시
+│   │   └── supabase.ts     # Case 1
 │   └── package.json
-└── native/                 # Flutter 래퍼
-    ├── lib/main.dart       # WebView + NativeBridge 채널
+└── native/
+    ├── lib/main.dart       # WebView + JavaScriptChannel
     └── pubspec.yaml
 ```
 
 ---
 
-## 🌉 Web-to-Native Bridge
+## Web-to-native bridge
 
-Capacitor와 Flutter 양쪽을 모두 지원하는 표준화된 브리지 패턴을 사용합니다.
+Capacitor와 Flutter가 같은 `native-bridge.ts` 패턴을 쓴다.
 
 ```typescript
 // lib/native-bridge.ts
 export const sendNativeMessage = (action: string, data: any = {}) => {
   const message = JSON.stringify({ action, data });
 
-  // CASE A: Capacitor
   if (window.Capacitor?.Plugins) {
-    // Capacitor 플러그인 호출
-  }
-  // CASE B: Flutter JavaScriptChannel
-  else if (window.JavaScriptChannel) {
+    // Capacitor plugin call
+  } else if (window.JavaScriptChannel) {
     window.JavaScriptChannel.postMessage(message);
   }
 };
@@ -170,19 +163,19 @@ export const sendNativeMessage = (action: string, data: any = {}) => {
 
 ---
 
-## 📋 Mobile UI/UX Checklist
+## Mobile UI checklist
 
-WebView가 네이티브 앱처럼 느껴지도록 아래 규칙을 반드시 적용합니다.
+WebView가 네이티브처럼 보이게 하려면:
 
-- [ ] 레이아웃 래퍼에 `max-w-md mx-auto` 적용 (모바일 뷰포트 고정)
-- [ ] 모든 인터랙티브 요소에 최소 터치 타겟 `h-11` (44px) 적용
-- [ ] 텍스트/이미지 선택 방지: `select-none`, `pointer-events-none`
-- [ ] 하단 시트/메뉴에 Shadcn `Drawer` 컴포넌트 사용
-- [ ] 로딩 상태에 Shadcn `Skeleton` 컴포넌트 사용
-- [ ] 피드백에 Shadcn `Toast` 컴포넌트 사용
+- [ ] Layout: `max-w-md mx-auto`
+- [ ] Touch targets: at least `h-11` (44px)
+- [ ] Disable stray selection: `select-none`, `pointer-events-none` where needed
+- [ ] Bottom sheets: Shadcn `Drawer`
+- [ ] Loading: Shadcn `Skeleton`
+- [ ] Feedback: Shadcn `Toast`
 
 ---
 
-## 📄 License
+## License
 
 MIT
